@@ -1,7 +1,3 @@
-Certainly! Here's a brief README for your project, along with keyboard navigation instructions:
-
----
-
 # Movie App
 
 A movie browsing app that allows users to view popular movies, now playing movies, and favorite movies. The app uses Redux for state management, Redux Saga for side effects, and React Router for navigation.
