@@ -1,20 +1,16 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
+export const Movie = ({ movieData, isSelected }) => {
+  //Change the color of the movie if it is selected.
+  const style = isSelected ? { border: '3px solid blue', backgroundColor: '#f0f0f0' } : {}; 
 
-export const Movie = ({movieData}) => {
-    const nav = useNavigate()
-
-    const selectMovie = (id) => {
-        nav(`/movie/${id}`);
-      };
-
-      
   return (
-    <div style={{ width: '200px', border: 'solid 2px pink', margin: '5px', padding: '10px' }}>
-             <div onClick={() => selectMovie(movieData.id)}>{movieData.title}</div>
-        
+    <div 
+      style={{border: '3px solid pink' ,width: '200px', margin: '5px', padding: '10px', ...style }} 
+    >
+      <div>{movieData.title}</div>
     </div>
-  )
-}
-export default Movie
+  );
+};
+
+export default Movie;
