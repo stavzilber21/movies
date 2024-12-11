@@ -8,24 +8,6 @@ A movie browsing app that allows users to view popular movies, now playing movie
 - Fetches movie data from an external API (The Movie Database API).
 - Error handling for API requests.
 
-## Installation
-
-1. Clone the repository:
-   ```bash
-   git clone <repository_url>
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Run the app:
-   ```bash
-   npm run dev
-   ```
-
-The app will be available at `http://localhost:3000`.
-
 ## Keyboard Navigation
 
 Use the following keyboard shortcuts to navigate within the app:
