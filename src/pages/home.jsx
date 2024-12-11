@@ -13,6 +13,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+const error = useSelector((state) => state.error); 
 const popularMovies = useSelector((state) => state.popularMovies);
 const nowPlayingMovies = useSelector((state) => state.nowPlayingMovies);
 const favorites = useSelector((state) => state.favorites);
@@ -74,6 +75,7 @@ const filteredMovies = useMemo(() => {
   return (
     <div>
       <h2>Movies</h2>
+      {error && <div className="error-message">{error}</div>}
       <nav className="navbar">
         {filterLabels.map((label, index) => (
           <button

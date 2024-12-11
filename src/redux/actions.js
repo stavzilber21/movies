@@ -5,6 +5,8 @@ export const SET_POPULAR_MOVIES = "SET_POPULAR_MOVIES";
 export const SET_NOW_PLAYING_MOVIES = "SET_NOW_PLAYING_MOVIES";
 export const ADD_TO_FAVORITES = 'ADD_TO_FAVORITES';
 export const REMOVE_FROM_FAVORITES = 'REMOVE_FROM_FAVORITES';
+export const SET_ERROR = "SET_ERROR";
+
 
 export const fetchPopularMovies = () => ({
   type: FETCH_POPULAR_MOVIES,
@@ -33,4 +35,10 @@ export const removeFromFavorites = (movie) => ({
   type: REMOVE_FROM_FAVORITES,
   payload: movie,
 });
+
+export const setError = (message) => ({
+  type: SET_ERROR,
+  payload: message,
+});
+
 
