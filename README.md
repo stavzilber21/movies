@@ -21,7 +21,7 @@ A movie browsing app that allows users to view popular movies, now playing movie
 
 3. Run the app:
    ```bash
-   npm start
+   npm run dev
    ```
 
 The app will be available at `http://localhost:3000`.
