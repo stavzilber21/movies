@@ -1,5 +1,5 @@
 import { takeLatest, call, put } from "redux-saga/effects";
-import { FETCH_POPULAR_MOVIES, FETCH_NOW_PLAYING_MOVIES, setPopularMovies, setNowPlayingMovies } from "./actions";
+import { FETCH_POPULAR_MOVIES, FETCH_NOW_PLAYING_MOVIES,FETCH_ALL_MOVIES, setPopularMovies, setNowPlayingMovies,setAllMovies } from "./actions";
 
 
 const options = {
@@ -24,6 +24,13 @@ const fetchNowPlayingMoviesApi = async () => {
   return response.json();
 };
 
+// Function to retrieve movies that are now playing
+const fetchAllMoviesApi = async () => {
+  const response = await fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc', options)
+  if (!response.ok) throw new Error("Failed to fetch now playing movies");
+  return response.json();
+};
+
 function* fetchPopularMoviesSaga() {
   try {
     const data = yield call(fetchPopularMoviesApi);
@@ -44,7 +51,18 @@ function* fetchNowPlayingMoviesSaga() {
   }
 }
 
+function* fetchAllMoviesSaga() {
+  try {
+    const data = yield call(fetchAllMoviesApi);
+    yield put(setAllMovies(data.results)); 
+  } catch (error) {
+    console.error("Error fetching now playing movies:", error.message);
+    
+  }
+}
+
 export default function* rootSaga() {
   yield takeLatest(FETCH_POPULAR_MOVIES, fetchPopularMoviesSaga);
   yield takeLatest(FETCH_NOW_PLAYING_MOVIES, fetchNowPlayingMoviesSaga);
+  yield takeLatest(FETCH_ALL_MOVIES, fetchAllMoviesSaga);
 }
