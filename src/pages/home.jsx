@@ -13,29 +13,40 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-const error = useSelector((state) => state.error); 
-const popularMovies = useSelector((state) => state.popularMovies);
-const nowPlayingMovies = useSelector((state) => state.nowPlayingMovies);
-const favorites = useSelector((state) => state.favorites);
+  // Error state from Redux
+  const error = useSelector((state) => state.error); 
+  const popularMovies = useSelector((state) => state.popularMovies);
+  const nowPlayingMovies = useSelector((state) => state.nowPlayingMovies);
+  const favorites = useSelector((state) => state.favorites);
 
-const filteredMovies = useMemo(() => {
-  if (filter === "popular") return popularMovies;
-  if (filter === "nowPlaying") return nowPlayingMovies;
-  if (filter === "favorites") return favorites;
-}, [popularMovies, nowPlayingMovies, favorites, filter]);
+  // Check if popular and nowPlaying movies are already loaded
+  const popularMoviesLoaded = useSelector((state) => state.popularMovies.length > 0);
+  const nowPlayingMoviesLoaded = useSelector((state) => state.nowPlayingMovies.length > 0);
 
+  // Memoizing filtered movies to avoid recalculating on each render
+  const filteredMovies = useMemo(() => {
+    if (filter === "popular") return popularMovies;
+    if (filter === "nowPlaying") return nowPlayingMovies;
+    if (filter === "favorites") return favorites;
+  }, [filter, popularMovies, nowPlayingMovies, favorites]);
 
+  // Fetch movies only if they haven't been loaded yet
   useEffect(() => {
-    if (filter === "popular") dispatch(fetchPopularMovies());
-    if (filter === "nowPlaying") dispatch(fetchNowPlayingMovies());
-  }, [filter, dispatch]);
+    if (filter === "popular" && !popularMoviesLoaded) {
+      dispatch(fetchPopularMovies());
+    }
+    if (filter === "nowPlaying" && !nowPlayingMoviesLoaded) {
+      dispatch(fetchNowPlayingMovies());
+    }
+  }, [filter, dispatch, popularMoviesLoaded, nowPlayingMoviesLoaded]);
 
   // For bar navigation using arrows
   const filterOptions = ["popular", "nowPlaying", "favorites"];
   const filterLabels = ["Popular", "Airing Now", "My Favorites"];
 
+  // Handle keyboard events for navigation
   const handleKeyDown = useCallback((event) => {
-    //Filter bar navigation
+    // Filter bar navigation
     if (focusOnFilters) {
       if (event.key === 'ArrowRight') {
         setSelectedFilterIndex((prevIndex) => (prevIndex + 1) % filterOptions.length);
@@ -57,7 +68,7 @@ const filteredMovies = useMemo(() => {
         const selectedMovie = filteredMovies[selectedMovieIndex];
         navigate(`/movie/${selectedMovie.id}`);
       } else if (event.key === 'Escape') {
-         // Back to the filter bar
+        // Back to the filter bar
         setFocusOnFilters(true); 
       }
     }
@@ -69,8 +80,6 @@ const filteredMovies = useMemo(() => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [handleKeyDown]);
-
-
 
   return (
     <div>
