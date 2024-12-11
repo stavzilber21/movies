@@ -1,7 +1,7 @@
 import React from 'react';
 import "../UI/styles.css"
 
-export const Movie = ({ movieData, isSelected }) => {
+export const Movie = React.memo(({ movieData, isSelected }) => {
   //Change the color of the movie if it is selected.
   const style = isSelected ? { border: '3px solid blue', backgroundColor: '#f0f0f0' } : {}; 
 
@@ -10,6 +10,6 @@ export const Movie = ({ movieData, isSelected }) => {
       <div>{movieData.title}</div>
     </div>
   );
-};
+});
 
 export default Movie;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from "react-router-dom";
 import { addToFavorites, removeFromFavorites } from '../redux/actions';
@@ -21,14 +21,15 @@ export const MovieDetails = () => {
   const index = favorites.findIndex((favMovie) => favMovie.id === movie.id);
   const isFavorite = index !== -1; 
 
-  // Add / Remove Movie to Favorites
-  const toggleFavorite = () => {
+  // Add / Remove Movie to Favorites,useCallback avoid unnecessary renderings
+  const toggleFavorite = useCallback(() => {
     if (isFavorite) {
       dispatch(removeFromFavorites(movie));
     } else {
       dispatch(addToFavorites(movie));
     }
-  };
+  }, [isFavorite, dispatch, movie]);
+  
 
   // Handle keyboard events (ESCAPE and F for favorite)
   useEffect(() => {

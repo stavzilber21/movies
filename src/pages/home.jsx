@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPopularMovies, fetchNowPlayingMovies } from "../redux/actions";
 import Movie from "../components/movie";
 import { useNavigate } from 'react-router-dom';
-import "../UI/styles.css"
+import "../UI/styles.css";
 
 const Home = () => {
   const [filter, setFilter] = useState("popular");
@@ -13,22 +13,27 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // For bar navigation using arrows
-  const filterOptions = ["popular", "nowPlaying", "favorites"];
-  const filterLabels = ["Popular", "Airing Now", "My Favorites"];
+const popularMovies = useSelector((state) => state.popularMovies);
+const nowPlayingMovies = useSelector((state) => state.nowPlayingMovies);
+const favorites = useSelector((state) => state.favorites);
 
-  const movies = useSelector((state) => {
-    if (filter === "popular") return state.popularMovies;
-    if (filter === "nowPlaying") return state.nowPlayingMovies;
-    if (filter === "favorites") return state.favorites;
-  });
+const filteredMovies = useMemo(() => {
+  if (filter === "popular") return popularMovies;
+  if (filter === "nowPlaying") return nowPlayingMovies;
+  if (filter === "favorites") return favorites;
+}, [popularMovies, nowPlayingMovies, favorites, filter]);
+
 
   useEffect(() => {
     if (filter === "popular") dispatch(fetchPopularMovies());
     if (filter === "nowPlaying") dispatch(fetchNowPlayingMovies());
   }, [filter, dispatch]);
 
-  const handleKeyDown = (event) => {
+  // For bar navigation using arrows
+  const filterOptions = ["popular", "nowPlaying", "favorites"];
+  const filterLabels = ["Popular", "Airing Now", "My Favorites"];
+
+  const handleKeyDown = useCallback((event) => {
     //Filter bar navigation
     if (focusOnFilters) {
       if (event.key === 'ArrowRight') {
@@ -44,25 +49,27 @@ const Home = () => {
     } else {
       // Navigating the movie list
       if (event.key === 'ArrowDown') {
-        setSelectedMovieIndex((prevIndex) => (prevIndex + 1) % movies.length);
+        setSelectedMovieIndex((prevIndex) => (prevIndex + 1) % filteredMovies.length);
       } else if (event.key === 'ArrowUp') {
-        setSelectedMovieIndex((prevIndex) => (prevIndex - 1 + movies.length) % movies.length);
+        setSelectedMovieIndex((prevIndex) => (prevIndex - 1 + filteredMovies.length) % filteredMovies.length);
       } else if (event.key === 'Enter') {
-        const selectedMovie = movies[selectedMovieIndex];
+        const selectedMovie = filteredMovies[selectedMovieIndex];
         navigate(`/movie/${selectedMovie.id}`);
       } else if (event.key === 'Escape') {
-        // Back to the filter bar
+         // Back to the filter bar
         setFocusOnFilters(true); 
       }
     }
-  };
+  }, [focusOnFilters, filteredMovies, selectedMovieIndex, selectedFilterIndex, filterOptions, navigate]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [movies, selectedMovieIndex, selectedFilterIndex, focusOnFilters]);
+  }, [handleKeyDown]);
+
+
 
   return (
     <div>
@@ -78,7 +85,7 @@ const Home = () => {
         ))}
       </nav>
       <div className="movies-container">
-        {movies.map((movie, index) => (
+        {filteredMovies.map((movie, index) => (
           <Movie
             key={movie.id}
             movieData={movie}
