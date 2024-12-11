@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from "react-router-dom";
 import { addToFavorites, removeFromFavorites } from '../redux/actions';
+import "../UI/styles.css"
 
 export const MovieDetails = () => {
   const { id } = useParams();
@@ -14,6 +15,7 @@ export const MovieDetails = () => {
 
   if (!movie) return <p>Movie not found</p>;
 
+  //Checking in Redux if the movie is in favorites
   const favorites = useSelector((state) => state.favorites);
 
   const index = favorites.findIndex((favMovie) => favMovie.id === movie.id);
@@ -34,6 +36,7 @@ export const MovieDetails = () => {
       if (event.key === 'Escape') {
         navigate(-1); // Navigate back
       } else if (event.key === 'F') {
+        //Pressing f + shift will add / remove the movie from favorites.
         toggleFavorite(); // Toggle favorite status
       }
     };
@@ -45,29 +48,24 @@ export const MovieDetails = () => {
   }, [navigate, toggleFavorite]);
 
   return (
-    <div style={{ padding: "15px", border: "2px solid gray", margin: "25px" }}>
+    <div className="movie-details-container">
+    <img
+      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+      alt={movie.title}
+    />
+    <div className="movie-details-content">
       <h1>{movie.title}</h1>
-      <img
-        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-        alt={movie.title}
-      />
       <p>{movie.overview}</p>
-      <p>Release Date: {movie.release_date}</p>
-      <p>Rating: {movie.vote_average}</p>
-      <button 
-        onClick={toggleFavorite} 
-        style={{
-          border: 'none', 
-          background: 'none', 
-          cursor: 'pointer', 
-          fontSize: '50px', 
-          padding: '4px',
-          color: isFavorite ? 'red' : 'grey'
-        }}
+      <p><strong>Release Date:</strong> {movie.release_date}</p>
+      <p><strong>Rating:</strong> {movie.vote_average}</p>
+      <button
+        onClick={toggleFavorite}
+        className={`favorite-button ${isFavorite ? 'favorite' : ''}`}
       >
-        {isFavorite ? '♥' : '♡'} 
+        {isFavorite ? '♥' : '♡'}
       </button>
     </div>
+  </div>
   );
 };
 

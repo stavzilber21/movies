@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPopularMovies, fetchNowPlayingMovies } from "../redux/actions";
 import Movie from "../components/movie";
 import { useNavigate } from 'react-router-dom';
+import "../UI/styles.css"
 
 const Home = () => {
   const [filter, setFilter] = useState("popular");
@@ -12,6 +13,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // For bar navigation using arrows
   const filterOptions = ["popular", "nowPlaying", "favorites"];
   const filterLabels = ["Popular", "Airing Now", "My Favorites"];
 
@@ -65,20 +67,17 @@ const Home = () => {
   return (
     <div>
       <h2>Movies</h2>
-      <nav style={{ display: "flex", gap: "10px" }}>
+      <nav className="navbar">
         {filterLabels.map((label, index) => (
           <button
             key={index}
-            style={{
-              fontWeight: index === selectedFilterIndex ? "bold" : "normal",
-              backgroundColor: index === selectedFilterIndex ? "lightblue" : "white",
-            }}
+            className={index === selectedFilterIndex ? "selected" : ""}
           >
             {label}
           </button>
         ))}
       </nav>
-      <div>
+      <div className="movies-container">
         {movies.map((movie, index) => (
           <Movie
             key={movie.id}
