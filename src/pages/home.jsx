@@ -5,10 +5,15 @@ import Movie from "../components/movie";
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-  const [filter, setFilter] = useState("popular"); 
+  const [filter, setFilter] = useState("popular");
+  const [selectedFilterIndex, setSelectedFilterIndex] = useState(0);
   const [selectedMovieIndex, setSelectedMovieIndex] = useState(0); 
+  const [focusOnFilters, setFocusOnFilters] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const filterOptions = ["popular", "nowPlaying", "favorites"];
+  const filterLabels = ["Popular", "Airing Now", "My Favorites"];
 
   const movies = useSelector((state) => {
     if (filter === "popular") return state.popularMovies;
@@ -21,40 +26,64 @@ const Home = () => {
     if (filter === "nowPlaying") dispatch(fetchNowPlayingMovies());
   }, [filter, dispatch]);
 
-  //Navigating movies using the keyboard
   const handleKeyDown = (event) => {
-    if (event.key === 'ArrowDown') {
-      setSelectedMovieIndex((prevIndex) => (prevIndex + 1) % movies.length); 
-    } else if (event.key === 'ArrowUp') {
-      setSelectedMovieIndex((prevIndex) => (prevIndex - 1 + movies.length) % movies.length);
-    } else if (event.key === 'Enter') {
-      const selectedMovie = movies[selectedMovieIndex];
-      navigate(`/movie/${selectedMovie.id}`); 
+    //Filter bar navigation
+    if (focusOnFilters) {
+      if (event.key === 'ArrowRight') {
+        setSelectedFilterIndex((prevIndex) => (prevIndex + 1) % filterOptions.length);
+      } else if (event.key === 'ArrowLeft') {
+        setSelectedFilterIndex((prevIndex) => (prevIndex - 1 + filterOptions.length) % filterOptions.length);
+      } else if (event.key === 'Enter') {
+        setFilter(filterOptions[selectedFilterIndex]);
+        // Move focus to the movie list
+        setFocusOnFilters(false); 
+        setSelectedMovieIndex(0); 
+      }
+    } else {
+      // Navigating the movie list
+      if (event.key === 'ArrowDown') {
+        setSelectedMovieIndex((prevIndex) => (prevIndex + 1) % movies.length);
+      } else if (event.key === 'ArrowUp') {
+        setSelectedMovieIndex((prevIndex) => (prevIndex - 1 + movies.length) % movies.length);
+      } else if (event.key === 'Enter') {
+        const selectedMovie = movies[selectedMovieIndex];
+        navigate(`/movie/${selectedMovie.id}`);
+      } else if (event.key === 'Escape') {
+        // Back to the filter bar
+        setFocusOnFilters(true); 
+      }
     }
   };
-
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [movies, selectedMovieIndex]);
+  }, [movies, selectedMovieIndex, selectedFilterIndex, focusOnFilters]);
 
   return (
     <div>
       <h2>Movies</h2>
-      <nav>
-        <button onClick={() => setFilter("popular")}>Popular</button>
-        <button onClick={() => setFilter("nowPlaying")}>Airing Now</button>
-        <button onClick={() => setFilter("favorites")}>My Favorites</button>
+      <nav style={{ display: "flex", gap: "10px" }}>
+        {filterLabels.map((label, index) => (
+          <button
+            key={index}
+            style={{
+              fontWeight: index === selectedFilterIndex ? "bold" : "normal",
+              backgroundColor: index === selectedFilterIndex ? "lightblue" : "white",
+            }}
+          >
+            {label}
+          </button>
+        ))}
       </nav>
       <div>
         {movies.map((movie, index) => (
           <Movie
             key={movie.id}
             movieData={movie}
-            isSelected={index === selectedMovieIndex} 
+            isSelected={index === selectedMovieIndex}
           />
         ))}
       </div>

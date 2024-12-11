@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { addToFavorites, removeFromFavorites } from '../redux/actions';
 
 export const MovieDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate(); 
   const dispatch = useDispatch();
 
   const movie = useSelector((state) =>
@@ -15,8 +16,8 @@ export const MovieDetails = () => {
 
   const favorites = useSelector((state) => state.favorites);
 
-    const index = favorites.findIndex((favMovie) => favMovie.id === movie.id);
-    const isFavorite = index !== -1; 
+  const index = favorites.findIndex((favMovie) => favMovie.id === movie.id);
+  const isFavorite = index !== -1; 
 
   // Add / Remove Movie to Favorites
   const toggleFavorite = () => {
@@ -26,6 +27,22 @@ export const MovieDetails = () => {
       dispatch(addToFavorites(movie));
     }
   };
+
+  // Handle keyboard events (ESCAPE and F for favorite)
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        navigate(-1); // Navigate back
+      } else if (event.key === 'F') {
+        toggleFavorite(); // Toggle favorite status
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [navigate, toggleFavorite]);
 
   return (
     <div style={{ padding: "15px", border: "2px solid gray", margin: "25px" }}>
