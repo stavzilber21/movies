@@ -26,7 +26,6 @@ Use the following keyboard shortcuts to navigate within the app:
 
 ## Built With:
 - React
-- Redux
 - Redux Saga
 - React Router
 - The Movie Database API 
