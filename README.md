@@ -1,8 +1,33 @@
-# React + Vite
+# Movie App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A movie browsing app that allows users to view popular movies, now playing movies, and favorite movies. The app uses Redux for state management, Redux Saga for side effects, and React Router for navigation.
 
-Currently, two official plugins are available:
+## Features:
+- Displays popular movies, movies that are currently playing, and user's favorite movies.
+- Allows users to navigate using keyboard shortcuts.
+- Fetches movie data from an external API (The Movie Database API).
+- Error handling for API requests.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Keyboard Navigation
+
+Use the following keyboard shortcuts to navigate within the app:
+
+### Filter Navigation:
+- **Arrow Left**: Move to the previous filter (e.g., from "Popular" to "Airing Now").
+- **Arrow Right**: Move to the next filter (e.g., from "Airing Now" to "My Favorites").
+- **Enter**: Select the current filter and switch to the movie list.
+- **Escape**: Go back to the filter bar from the movie list.
+
+### Movie List Navigation:
+- **Arrow Left**: Move to the previous movie in the list (horizontal navigation).
+- **Arrow Right**: Move to the next movie in the list (horizontal navigation).
+- **Arrow Up**: Move up to the previous movie in the list.
+- **Arrow Down**: Move down to the next movie in the list.
+- **Enter**: Select the currently highlighted movie and view its details.
+- **Escape**: Return to the filter bar from the movie list.
+
+## Built With:
+- React
+- Redux Saga
+- React Router
+- The Movie Database API 
