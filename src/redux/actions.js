@@ -8,13 +8,17 @@ export const REMOVE_FROM_FAVORITES = 'REMOVE_FROM_FAVORITES';
 export const SET_ERROR = "SET_ERROR";
 
 
-export const fetchPopularMovies = () => ({
+export const fetchPopularMovies = (page) => ({
   type: FETCH_POPULAR_MOVIES,
+  payload: page, 
 });
 
-export const fetchNowPlayingMovies = () => ({
+
+export const fetchNowPlayingMovies = (page) => ({
   type: FETCH_NOW_PLAYING_MOVIES,
+  payload: page, 
 });
+
 
 export const setPopularMovies = (movies) => ({
   type: SET_POPULAR_MOVIES,

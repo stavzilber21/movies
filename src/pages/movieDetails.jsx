@@ -5,14 +5,22 @@ import { addToFavorites, removeFromFavorites } from '../redux/actions';
 import "../UI/styles.css"
 
 export const MovieDetails = () => {
-  const { id } = useParams();
+  const { id, category } = useParams();
   const navigate = useNavigate(); 
   const dispatch = useDispatch();
 
-  const movie = useSelector((state) =>
-    state.popularMovies.find((movie) => movie.id === parseInt(id))
-  ); 
-
+  // Search for the movie in the appropriate list
+  const movie = useSelector((state) => {
+    if (category === "popular") {
+      return state.popularMovies.find((movie) => movie.id === parseInt(id));
+    } else if (category === "nowPlaying") {
+      return state.nowPlayingMovies.find((movie) => movie.id === parseInt(id));
+    }
+    else if (category === "favorites") {
+      return state.favorites.find((movie) => movie.id === parseInt(id));
+    }
+    return null; 
+  });
   if (!movie) return <p>Movie not found</p>;
 
   //Checking in Redux if the movie is in favorites
