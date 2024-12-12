@@ -66,6 +66,12 @@ export const MovieDetails = () => {
           >
             {isFavorite ? '♥' : '♡'}
           </button>
+          <button
+            onClick={() => navigate("/")}
+            className="back-button"
+            >
+            Back to Movies
+        </button>
       </div>
   </div>
   
