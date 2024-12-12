@@ -8,6 +8,10 @@ export const Movie = React.memo(({ movieData, isSelected }) => {
   return (
     <div className="movie-card" style={style}>
       <div>{movieData.title}</div>
+      <img
+      src={`https://image.tmdb.org/t/p/w500${movieData.poster_path}`}
+      alt={movieData.title}
+    />
     </div>
   );
 });

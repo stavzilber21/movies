@@ -50,23 +50,26 @@ export const MovieDetails = () => {
 
   return (
     <div className="movie-details-container">
-    <img
-      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-      alt={movie.title}
-    />
-    <div className="movie-details-content">
-      <h1>{movie.title}</h1>
-      <p>{movie.overview}</p>
-      <p><strong>Release Date:</strong> {movie.release_date}</p>
-      <p><strong>Rating:</strong> {movie.vote_average}</p>
-      <button
-        onClick={toggleFavorite}
-        className={`favorite-button ${isFavorite ? 'favorite' : ''}`}
-      >
-        {isFavorite ? '♥' : '♡'}
-      </button>
-    </div>
+      <img
+        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+        alt={movie.title}
+      />
+      <div className="movie-details-content">
+          <h1 className="movie-title">{movie.title}</h1>
+          <p className="movie-overview">{movie.overview}</p>
+          <p className="movie-info"><strong>Release Date:</strong> {movie.release_date}</p>
+          <p className="movie-info"><strong>Rating:</strong> {movie.vote_average}</p>
+          <p className="movie-info"><strong>Popularity:</strong> {movie.popularity}</p>
+          <button
+            onClick={toggleFavorite}
+            className={`favorite-button ${isFavorite ? 'favorite' : ''}`}
+          >
+            {isFavorite ? '♥' : '♡'}
+          </button>
+      </div>
   </div>
+  
+
   );
 };
 
